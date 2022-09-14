@@ -1,4 +1,4 @@
-package shared;
+package personal.mazegeneration.main.shared;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -54,6 +54,9 @@ public class Maze<T extends Cell> implements Iterable<T>, MazeBase<T> {
             }
         };
     }
+
+    public int getXSize() { return xSize; }
+    public int getYSize() { return ySize; }
 
     public T getCellAt(final int x, final int y) {
         if (x < 0 || y < 0 || x > (xSize - 1) || y > (ySize - 1))

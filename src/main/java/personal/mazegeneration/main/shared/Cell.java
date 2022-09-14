@@ -1,4 +1,4 @@
-package shared;
+package personal.mazegeneration.main.shared;
 
 public class Cell implements CellBase {
     final int x;
@@ -28,8 +28,18 @@ public class Cell implements CellBase {
         this.west = west;
     }
 
+    public int getX() { return x; }
+    public int getY() { return y; }
+
+    public boolean hasNorth() { return north; }
     public void setNorth(final boolean north) { this.north = north; }
+
+    public boolean hasEast() { return east; }
     public void setEast(final boolean east) { this.east = east; }
+
+    public boolean hasSouth() { return south; }
     public void setSouth(final boolean south) { this.south = south; }
+
+    public boolean hasWest() { return west; }
     public void setWest(final boolean west) { this.west = west; }
 }

@@ -1,5 +1,7 @@
-import shared.Cell;
-import shared.Maze;
+package personal.mazegeneration.main;
+
+import personal.mazegeneration.main.shared.Cell;
+import personal.mazegeneration.main.shared.Maze;
 
 public class Handler {
     public static void main(final String[] args) {
