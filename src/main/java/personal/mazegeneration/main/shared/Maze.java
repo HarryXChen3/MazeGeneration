@@ -1,8 +1,8 @@
 package personal.mazegeneration.main.shared;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.function.BiFunction;
 
 public class Maze<T extends Cell> implements Iterable<T>, MazeBase<T> {
@@ -33,16 +33,20 @@ public class Maze<T extends Cell> implements Iterable<T>, MazeBase<T> {
         this.maze = maze;
     }
 
-    @Override
-    public Iterator<T> iterator() {
-        return new Iterator<>() {
-            private int xDim = 0;
-            private int yDim = 0;
+    public ListIterator<T> iterator(final int index) {
+        return new ListIterator<>() {
+            private int xDim = (xSize != 0) ? (index % xSize) : 0;
+            private int yDim = (xSize != 0) ? (index / xSize) : 0;
             private List<T> yRow;
 
             @Override
             public boolean hasNext() {
                 return (yDim < (ySize - 1)) || (xDim < (xSize - 1)) || (xDim == 0 && yRow == null && xSize > 0);
+            }
+
+            @Override
+            public boolean hasPrevious() {
+                return (ySize != 0 && xSize != 0 && (yDim != 0 || xDim != 0));
             }
 
             @Override
@@ -52,7 +56,51 @@ public class Maze<T extends Cell> implements Iterable<T>, MazeBase<T> {
                 else
                     return (yRow = maze.get(++yDim)).get(xDim = 0);
             }
+
+            @Override
+            public T previous() {
+                if (xDim != 0)
+                    return (yRow == null ? ((yRow = maze.get(yDim)).get(xDim)) : (yRow.get(--xDim)));
+                else
+                    return (yRow = maze.get(--yDim)).get(xDim = (xSize - 1));
+            }
+
+            @Override
+            public int nextIndex() {
+                if (xDim < (xSize - 1) || (xDim == 0 && xSize > 0))
+                    return ((xSize - 1) + ((yDim - 1) * xSize) + xDim + 1);
+                else
+                    return 0;
+            }
+
+            @Override
+            public int previousIndex() {
+                if (xDim != 0)
+                    return (yDim * xSize) + xDim - 1; // - 1
+                else
+                    return ((xSize - 1) + (yDim - 2) * xSize) + xSize - 1;
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException("ListIterator remove");
+            }
+
+            @Override
+            public void set(final T element) {
+                throw new UnsupportedOperationException("ListIterator set");
+            }
+
+            @Override
+            public void add(final T element) {
+                throw new UnsupportedOperationException("ListIterator add");
+            }
         };
+    }
+
+    @Override
+    public ListIterator<T> iterator() {
+        return iterator(0);
     }
 
     public int getXSize() { return xSize; }

@@ -7,10 +7,13 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CellTest {
+    private static final int xDim = 100;
+    private static final int yDim = 100;
+
     @Test
     public void CellCreationTest() {
-        final int[] xCoords = IntStream.range(0, 100).toArray();
-        final int[] yCoords = IntStream.range(0, 100).toArray();
+        final int[] xCoords = IntStream.range(0, xDim).toArray();
+        final int[] yCoords = IntStream.range(0, yDim).toArray();
 
         for (final int x : xCoords) {
             for (final int y : yCoords) {
