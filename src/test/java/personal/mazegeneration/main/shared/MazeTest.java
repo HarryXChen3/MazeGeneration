@@ -11,8 +11,8 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MazeTest {
-    private static final int xDim = 10;
-    private static final int yDim = 10;
+    private static final int xDim = 50;
+    private static final int yDim = 50;
     private static final BiFunction<Integer, Integer, Cell> constructor = Cell::new;
 
     @ParameterizedTest
@@ -21,7 +21,10 @@ public class MazeTest {
         final Maze<Cell> maze = new Maze<>(xSize, ySize, constructor);
         for (final ListIterator<Cell> iterator = maze.iterator(); iterator.hasNext();) {
             final int rawIndex = iterator.nextIndex();
+            final Cell cell = iterator.next();
 
+            assertEquals((Math.max(0, rawIndex) % xSize), cell.getX());
+            assertEquals(rawIndex / xSize, cell.getY());
         }
     }
 
@@ -29,15 +32,12 @@ public class MazeTest {
     @MethodSource("MazeIterTest")
     public void MazeBackwardsIterTest(final int xSize, final int ySize) {
         final Maze<Cell> maze = new Maze<>(xSize, ySize, constructor);
-        for (final ListIterator<Cell> iterator = maze.iterator((ySize * xSize) - 1); iterator.hasPrevious();) {
+        for (final ListIterator<Cell> iterator = maze.iterator(ySize * xSize); iterator.hasPrevious();) {
             final int rawIndex = iterator.previousIndex();
             final Cell cell = iterator.previous();
 
             assertEquals((Math.max(0, rawIndex) % xSize), cell.getX());
-            assertEquals((rawIndex / xSize) + 1, cell.getY());
-
-            //System.out.printf("(%d, %d); ", cell.getX(), cell.getY());
-            //System.out.print(cell.getX() == (0) ? "\n" : "");
+            assertEquals(rawIndex / xSize, cell.getY());
         }
     }
 

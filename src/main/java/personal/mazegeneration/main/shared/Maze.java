@@ -41,7 +41,12 @@ public class Maze<T extends Cell> implements Iterable<T>, MazeBase<T> {
 
             @Override
             public boolean hasNext() {
-                return (yDim < (ySize - 1)) || (xDim < (xSize - 1)) || (xDim == 0 && yRow == null && xSize > 0);
+                return
+                        (ySize != 0 && xSize != 0) && (
+                                (yDim < (ySize - 1)) ||
+                                (xDim < (xSize - 1)) ||
+                                (xDim == 0 && yRow == null && xSize > 0)
+                        );
             }
 
             @Override
@@ -51,8 +56,8 @@ public class Maze<T extends Cell> implements Iterable<T>, MazeBase<T> {
 
             @Override
             public T next() {
-                if (xDim < (xSize - 1) || (xDim == 0 && xSize > 0))
-                    return (yRow == null ? ((yRow = maze.get(yDim)).get(xDim)) : (yRow.get(++xDim)));
+                if (xDim < (xSize - 1) || (xDim == 0 && xSize > 1))
+                    return (yRow == null ? ((yRow = maze.get(yDim)).get(++xDim)) : (yRow.get(++xDim)));
                 else
                     return (yRow = maze.get(++yDim)).get(xDim = 0);
             }
@@ -60,25 +65,22 @@ public class Maze<T extends Cell> implements Iterable<T>, MazeBase<T> {
             @Override
             public T previous() {
                 if (xDim != 0)
-                    return (yRow == null ? ((yRow = maze.get(yDim)).get(xDim)) : (yRow.get(--xDim)));
+                    return (yRow == null ? ((yRow = maze.get(yDim)).get(--xDim)) : (yRow.get(--xDim)));
                 else
                     return (yRow = maze.get(--yDim)).get(xDim = (xSize - 1));
             }
 
             @Override
             public int nextIndex() {
-                if (xDim < (xSize - 1) || (xDim == 0 && xSize > 0))
-                    return ((xSize - 1) + ((yDim - 1) * xSize) + xDim + 1);
+                if (xDim < (xSize - 1) || (xDim == 0 && xSize > 1))
+                    return (yDim * xSize) + xDim + 1;
                 else
-                    return 0;
+                    return ((yDim + 1) * xSize);
             }
 
             @Override
             public int previousIndex() {
-                if (xDim != 0)
-                    return (yDim * xSize) + xDim - 1; // - 1
-                else
-                    return ((xSize - 1) + (yDim - 2) * xSize) + xSize - 1;
+                return (yDim * xSize) + xDim - 1; // - 1
             }
 
             @Override
@@ -100,7 +102,7 @@ public class Maze<T extends Cell> implements Iterable<T>, MazeBase<T> {
 
     @Override
     public ListIterator<T> iterator() {
-        return iterator(0);
+        return iterator(-1);
     }
 
     public int getXSize() { return xSize; }
